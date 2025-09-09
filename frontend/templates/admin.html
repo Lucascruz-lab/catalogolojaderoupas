@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    <h1>Painel do Admin</h1>
+    <a href="{{ url_for('logout') }}">Sair</a>
+
+    <h2>Adicionar Produtos</h2>
+    <form action="{{ url_for('add_produto') }}" method="post">
+        Código: <input name="codigo"><br>
+        Nome: <input name="nome"><br>
+        Categoria: <input name="categoria"><br>
+        Tamanho: <input name="tamanho"><br>
+        Cor: <input name="cor"><br>
+        Preço: <input name="preco" type="number" step="0.01"><br>
+        Promoção: <input name="promocao" type="checkbox"><br>
+        Link WhatsApp: <input name="link_wpp"><br>
+        <button type="submit">Adicionar</button>
+    </form>
+    <h2>Lista de Produtos</h2>
+    <ul>
+        {% for p in produtos %}
+        <li>{{p.nome}} - R$ {{"%.2f"|format(p.preco|float) }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

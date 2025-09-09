@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - {{categoria}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}">
+</head>
+<body>
+    <h1>{{ categoria }}</h1>
+    <div class="produtos">
+        {% for p in produtos %}
+        <div class="produto">
+            <h2>{{ p.nome }} {% if promocao %}<span style="color:red;">(Promoção)</span>{% endif %}</h2>
+            <p>Tamanho: {{ p.tamanho }} | cor: {{p.cor}}</p>
+            <p>Preço: R$ {{"%.2f"|format(p.preco|float)}}</p>
+            <a href="{{ p.link_wpp }}" target="_blank">Comprar no WhatsApp</a>
+        </div>
+        {% endfor %}
+
+    </div>
+    <a href="{{ url_for('home') }}">Voltar para categorias</a>
+</body>
+</html>

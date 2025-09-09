@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 20px;
+}
+
+.cards,
+.produtos{
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 150px;
+    text-align: center;
+}
+
+.produto {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 200px;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
