@@ -21,10 +21,17 @@
         Link WhatsApp: <input name="link_wpp"><br>
         <button type="submit">Adicionar</button>
     </form>
+
     <h2>Lista de Produtos</h2>
     <ul>
         {% for p in produtos %}
-        <li>{{p.nome}} - R$ {{"%.2f"|format(p.preco|float) }}</li>
+        <li>
+            {{p.nome}} - R$ {{"%.2f"|format(p.preco|float) }}
+            <form action="{{url_for('delete_produto', codigo=p.codigo) }}" method="POST" style="display: inline;">
+                <button type="submit">Excluir</button>
+            </form>
+            <a href="{{ url_for('edit_produto', codigo=p.codigo) }}">Editar</a>
+        </li>
         {% endfor %}
     </ul>
 </body>

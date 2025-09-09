@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo</title>
+</head>
+<body>
+    <h1>Catálogo de Produtos</h1>
+
+    <h2>Categorias</h2>
+    <ul>
+        {% for cat in categorias %}
+        <li><a href="#{{ cat }}">{{ cat }}</a></li>
+        {% endfor %}
+    </ul>
+
+    {% for p in produtos if p.categoria == cat %}
+        <h2 id="{{ cat }}">{{ cat }}</h2>
+        <ul>
+            {% for p in produtos if p.categoria == cat %}
+                <li>
+                    <b>{{p.nome}}</b> - {{p.cor}} - {{p.tamanho}} <br>
+                    R$ {{"%.2f"|format(p.preco|float)}}
+                    {% if p.promocao %}<span style="color:red;">(Promoção!)</span>{% endif %} <br>
+                    <a href="{{ p.link_wpp }}" target="_blank">Comprar no WhatsApp</a>
+        {% endfor %}        </li>
+        </ul>
+    {% endfor %}    
+</body>
+</html>

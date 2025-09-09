@@ -74,6 +74,47 @@ def add_produto():
 
     return redirect(url_for("admin"))
     
+@app.route("/admin/delete/<codigo>", methods=["POST"])
+def delete_produto(codigo):
+    if not session.get("admin"):
+        return redirect(url_for("login"))
+    
+    produtos = ler_produtos()
+    produtos = [p for p in produtos if p["codigo"] != codigo] 
+    salvar_produtos(produtos)
+
+    return redirect(url_for("admin"))   
+
+@app.route("/admin/edit/<codigo>", methods=["GET", "POST"])
+def edit_produto(codigo):
+    if not session.get("admin"):
+        return redirect(url_for("login"))
+    
+    produtos = ler_produtos()
+    produto = next((p for p in produtos if p["codigo"] == codigo), None)
+
+    if not produto:
+        return "Produto não encontrado", 404
+    
+    if request.method == "POST":
+        produto["nome"] = request.form.get("nome")
+        produto["categoria"] = request.form.get("categoria")
+        produto["tamanho"] = request.form.get("tamanho")
+        produto["cor"] = request.form.get("cor")
+        produto["preco"] = float(request.form.get("preco"))
+        produto["promocao"] = request.form.get("promocao") == "on"
+        produto["link_wpp"] = request.form.get("link_wpp")
+
+        salvar_produtos(produtos)
+        return redirect(url_for("admin"))
+    
+    return render_template("edit_produto.html", produto=produto)
+
+@app.route("/")
+def catalogo():
+    produtos = ler_produtos()
+    categorias = sorted(set([p["categoria"] for p in produtos]))
+    return render_template("catalogo.html", produtos=produtos, categorias=categorias)
 
 
 if __name__ == "__main__":

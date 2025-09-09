@@ -12,8 +12,8 @@
     <p style="color:red;">{{ erro }}</p>
     {% endif %}
     <form method="post" action="{{url_for('login')}}">
-        Usuário: <input><br>
-        Senha: <input type="password"><br>
+        Usuário: <input type="text" name="usuario"><br>
+        Senha: <input type="password" name="senha"><br>
         <button type="submit">Entrar</button>
     </form>
 </body>
