@@ -11,16 +11,26 @@
 
     <h2>Adicionar Produtos</h2>
     <form action="{{ url_for('add_produto') }}" method="post">
+
         Código: <input name="codigo"><br>
+
         Nome: <input name="nome"><br>
+
         Categoria: <input name="categoria"><br>
+
         Tamanho: <input name="tamanho"><br>
+
         Cor: <input name="cor"><br>
+
         <label>Preço Promocional</label>
         <input type="number" step="0.01" name="preco_promocional"><br>
+
         Preço: <input name="preco" type="number" step="0.01"><br>
+
         Promoção: <input name="promocao" type="checkbox"><br>
+
         Link WhatsApp: <input name="link_wpp"><br>
+        
         <button type="submit">Adicionar</button>
     </form>
 

@@ -12,7 +12,8 @@ def ler_produtos():
     
 def salvar_produtos(produtos):
     with open(ARQUIVO_JSON, "w", encoding="utf-8") as f:
-        json.dump(produtos, f, indent=4, ensure_ascii=False)    
+        json.dump(produtos, f, indent=4, ensure_ascii=False) 
+
 # ______________ROTAS______________________
 @app.route("/")
 def home():
@@ -54,9 +55,9 @@ def admin():
         categoria = request.form.get("categoria")
         cor = request.form.get("cor")
         tamanho = request.form.get("tamanho")
-        preco = request.form.get("preco")
-        preco_promocional = request.form.get("preco_promocional")
-        promocao = True if preco_promocional else False
+        preco = float(request.form.get("preco") or 0)
+        preco_promocional = float(request.form.get("preco_promocional") or 0)
+        promocao = preco_promocional > 0
         link_wpp = request.form.get("link_wpp")
         imagem = request.form.get("imagem")
 
@@ -84,16 +85,33 @@ def add_produto():
     if not session.get("admin"):
         return redirect(url_for("login"))
     
-    produtos=ler_produtos 
+    codigo = request.form.get("codigo")
+    nome = request.form.get("nome")
+    categoria = request.form.get("categoria")
+    tamanho = request.form.get("tamanho")
+    cor = request.form.get("cor")
+    preco = float(request.form.get("preco") or 0)
+    preco_promocional = float(request.form.get("preco_promocional") or 0)
+    promocao = preco_promocional > 0
+    link_wpp = request.form.get("link_wpp")
+
+    produtos=ler_produtos()
+    if produtos:
+        max_codigo = max(int(p["codigo"]) for p in produtos)
+        novo_codigo = str(max_codigo + 1).zfill(4)
+    else:
+        novo_codigo = "0001"    
+
     novo = {
-        "codigo": request.form["codigo"],
-        "nome": request.form["nome"],
-        "categoria": request.form["categoria"],
-        "tamanho": request.form["tamanho"],
-        "cor": request.form["cor"],
-        "preco": request.form["preco"],
-        "promocao": request.form["promocao"] == "on",
-        "link_wpp": request.form["link_wpp"],
+        "codigo": novo_codigo,
+        "nome": request.form.get("nome"),
+        "categoria": request.form.get("categoria"),
+        "tamanho": request.form.get("tamanho"),
+        "cor": request.form.get("cor"),
+        "preco": float(request.form.get("preco")),
+        "preco_promocional": preco_promocional if preco_promocional > 0 else None,
+        "link_wpp": request.form.get("link_wpp"),
+        "imagem": request.form.get("imagem")
     }
 
     produtos.append(novo)
@@ -125,19 +143,29 @@ def edit_produto(codigo):
     
     if request.method == "POST":
         produto["nome"] = request.form.get("nome")
+
         produto["categoria"] = request.form.get("categoria")
+
         produto["tamanho"] = request.form.get("tamanho")
+
         produto["cor"] = request.form.get("cor")
+
         produto["preco"] = float(request.form.get("preco"))
-        produto["promocao"] = request.form.get("promocao") == "on"
+
+        produto["preco_promocional"] = float(request.form.get("preco_promocional") or 0)
+
+        produto["promocao"] = produto["preco_promocional"] > 0
+
         produto["link_wpp"] = request.form.get("link_wpp")
+        
+        produto["imagem"] = request.form.get("imagem")
 
         salvar_produtos(produtos)
         return redirect(url_for("admin"))
     
     return render_template("edit_produto.html", produto=produto)
 
-@app.route("/")
+@app.route("/catalogo")
 def catalogo():
     produtos = ler_produtos()
     categorias = sorted(set([p["categoria"] for p in produtos]))
