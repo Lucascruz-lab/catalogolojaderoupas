@@ -5,11 +5,10 @@
         "categoria": "Oversize",
         "tamanho": "P",
         "cor": "Branca",
-        "preco": "79.90",
-        "promocao": false,
+        "preco": 79.9,
+        "promocao": true,
         "link_wpp": "https://wa.me/5519999999999?=Quero+comprar+Camiseta+Oversize+Branca"
     },
-
     {
         "codigo": "OVS-002-M-P",
         "nome": "Camiseta Oversize Preta",
@@ -20,7 +19,6 @@
         "promocao": true,
         "link_wpp": "https://wa.me/5519999999999?=Quero+comprar+Camiseta+Oversize+Preta"
     },
-
     {
         "codigo": "DRF-001-M",
         "nome": "Camiseta DryFit Preta",

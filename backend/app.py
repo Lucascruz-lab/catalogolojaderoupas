@@ -44,25 +44,40 @@ def logout():
     session.pop("admin", None)
     return redirect(url_for("login"))
 
-@app.route("/admin")
+@app.route("/admin", methods= ["GET", "POST"])
 def admin():
     if not session.get("admin"):
         return redirect(url_for("login"))
     
+    if request.method == "POST":
+        nome = request.form.get("nome")
+        categoria = request.form.get("categoria")
+        cor = request.form.get("cor")
+        tamanho = request.form.get("tamanho")
+        preco = request.form.get("preco")
+        preco_promocional = request.form.get("preco_promocional")
+        promocao = True if preco_promocional else False
+        link_wpp = request.form.get("link_wpp")
+        imagem = request.form.get("imagem")
+
+        novo_produto = {
+            "nome": nome,
+            "categoria": categoria,
+            "cor": cor,
+            "tamanho": tamanho,
+            "preco": preco,
+            "preco_promocional": preco_promocional if preco_promocional else None,
+            "promocao": bool(preco_promocional),
+            "link_wpp": link_wpp,
+            "imagem": imagem,
+        }
+
+        produtos = ler_produtos()
+        produtos.append(novo_produto)
+        salvar_produtos(produtos)
+
     produtos = ler_produtos()
     return render_template("admin.html", produtos=produtos)
-
-    novo_produto = {
-        "nome": nome,
-        "categoria": categoria,
-        "cor": cor,
-        "tamanho": tamanho,
-        "preco": preco,
-        "preco_promocional": preco_promocional if preco_promocional else None,
-        "promocao": bool(preco_promocional),
-        "link_wpp": link_wpp,
-        "imagem": imagem,
-    }
 
 @app.route("/admin/add", methods=["POST"])
 def add_produto():
