@@ -45,5 +45,17 @@
         "preco_promocional": null,
         "link_wpp": "",
         "imagem": null
+    },
+    {
+        "codigo": "0002",
+        "nome": "Camiseta Polo Branca",
+        "categoria": "Roupa Social",
+        "tamanho": "M",
+        "cor": "Branca",
+        "preco": 79.9,
+        "preco_promocional": null,
+        "promocao": false,
+        "link_wpp": "https://wa.me/5519999999999?=Quero+comprar+Camiseta+Oversize+Branca",
+        "imagem": ""
     }
 ]

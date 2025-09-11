@@ -14,6 +14,33 @@ def salvar_produtos(produtos):
     with open(ARQUIVO_JSON, "w", encoding="utf-8") as f:
         json.dump(produtos, f, indent=4, ensure_ascii=False) 
 
+def criar_produto(form_data):
+    produtos = ler_produtos()
+
+    # Gera código único
+    numeros = [int(p["codigo"]) for p in produtos if p.get("codigo") and p["codigo"].isdigit()]
+    novo_codigo = str(max(numeros, default=0) + 1).zfill(4)
+
+    preco = float(form_data.get("preco") or 0)
+    preco_promocional = float(form_data.get("preco_promocional") or 0)
+
+    novo_produto = {
+        "codigo": novo_codigo,
+        "nome": form_data.get("nome"),
+        "categoria": form_data.get("categoria"),
+        "tamanho": form_data.get("tamanho"),
+        "cor": form_data.get("cor"),
+        "preco": preco,
+        "preco_promocional": preco_promocional if preco_promocional > 0 else None,
+        "promocao": preco_promocional > 0,
+        "link_wpp": form_data.get("link_wpp"),
+        "imagem": form_data.get("imagem")
+    }
+
+    produtos.append(novo_produto)
+    salvar_produtos(produtos)
+    return novo_produto
+
 # ______________ROTAS______________________
 @app.route("/")
 def home():
@@ -51,31 +78,9 @@ def admin():
         return redirect(url_for("login"))
     
     if request.method == "POST":
-        nome = request.form.get("nome")
-        categoria = request.form.get("categoria")
-        cor = request.form.get("cor")
-        tamanho = request.form.get("tamanho")
-        preco = float(request.form.get("preco") or 0)
-        preco_promocional = float(request.form.get("preco_promocional") or 0)
-        promocao = preco_promocional > 0
-        link_wpp = request.form.get("link_wpp")
-        imagem = request.form.get("imagem")
+        criar_produto(request.form)
+        return redirect(url_for("admin"))
 
-        novo_produto = {
-            "nome": nome,
-            "categoria": categoria,
-            "cor": cor,
-            "tamanho": tamanho,
-            "preco": preco,
-            "preco_promocional": preco_promocional if preco_promocional else None,
-            "promocao": bool(preco_promocional),
-            "link_wpp": link_wpp,
-            "imagem": imagem,
-        }
-
-        produtos = ler_produtos()
-        produtos.append(novo_produto)
-        salvar_produtos(produtos)
 
     produtos = ler_produtos()
     return render_template("admin.html", produtos=produtos)
@@ -85,32 +90,7 @@ def add_produto():
     if not session.get("admin"):
         return redirect(url_for("login"))
     
-    preco = float(request.form.get("preco") or 0)
-    preco_promocional = float(request.form.get("preco_promocional") or 0)
-    promocao = preco_promocional > 0
-
-    produtos=ler_produtos()
-    if produtos:
-        numeros = [int(p["codigo"]) for p in produtos if p["codigo"].isdigit()]
-        novo_codigo = str(max(numeros, default=0) + 1).zfill(4)
-    else:
-        novo_codigo = "0001"    
-
-    novo = {
-        "codigo": novo_codigo,
-        "nome": request.form.get("nome"),
-        "categoria": request.form.get("categoria"),
-        "tamanho": request.form.get("tamanho"),
-        "cor": request.form.get("cor"),
-        "preco": float(request.form.get("preco")),
-        "preco_promocional": preco_promocional if preco_promocional > 0 else None,
-        "link_wpp": request.form.get("link_wpp"),
-        "imagem": request.form.get("imagem")
-    }
-
-    produtos.append(novo)
-    salvar_produtos(produtos)
-
+    criar_produto(request.form)
     return redirect(url_for("admin"))
     
 @app.route("/admin/delete/<codigo>", methods=["POST"])
