@@ -6,10 +6,10 @@
         "tamanho": "P",
         "cor": "Branca",
         "preco": 79.9,
-        "preco_promocional": 59.9,
-        "promocao": true,
+        "preco_promocional": 0.0,
+        "promocao": false,
         "link_wpp": "https://wa.me/5519999999999?=Quero+comprar+Camiseta+Oversize+Branca",
-        "imagem": ""
+        "imagem": null
     },
     {
         "codigo": "OVS-002-M-P",
@@ -34,5 +34,16 @@
         "promocao": false,
         "link_wpp": "https://wa.me/5519999999999?=Quero+comprar+Camiseta+DryFit+Preta",
         "imagem": ""
+    },
+    {
+        "codigo": "0001",
+        "nome": "Camiseta Oversize Branca",
+        "categoria": "Oversize",
+        "tamanho": "M",
+        "cor": "Branca",
+        "preco": 120.0,
+        "preco_promocional": null,
+        "link_wpp": "",
+        "imagem": null
     }
 ]

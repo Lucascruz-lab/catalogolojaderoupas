@@ -85,20 +85,14 @@ def add_produto():
     if not session.get("admin"):
         return redirect(url_for("login"))
     
-    codigo = request.form.get("codigo")
-    nome = request.form.get("nome")
-    categoria = request.form.get("categoria")
-    tamanho = request.form.get("tamanho")
-    cor = request.form.get("cor")
     preco = float(request.form.get("preco") or 0)
     preco_promocional = float(request.form.get("preco_promocional") or 0)
     promocao = preco_promocional > 0
-    link_wpp = request.form.get("link_wpp")
 
     produtos=ler_produtos()
     if produtos:
-        max_codigo = max(int(p["codigo"]) for p in produtos)
-        novo_codigo = str(max_codigo + 1).zfill(4)
+        numeros = [int(p["codigo"]) for p in produtos if p["codigo"].isdigit()]
+        novo_codigo = str(max(numeros, default=0) + 1).zfill(4)
     else:
         novo_codigo = "0001"    
 
@@ -157,7 +151,7 @@ def edit_produto(codigo):
         produto["promocao"] = produto["preco_promocional"] > 0
 
         produto["link_wpp"] = request.form.get("link_wpp")
-        
+
         produto["imagem"] = request.form.get("imagem")
 
         salvar_produtos(produtos)
