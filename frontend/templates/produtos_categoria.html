@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produtos - {{categoria}}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}">
-</head>
-<body>
-    <h1>{{ categoria }}</h1>
-    <a href="{{ url_for('home') }}">Voltar para categorias</a>
-    <div class="produtos">
-        {% for p in produtos %}
-        <div class="produto">
-            <h2>{{ p.nome }} {% if promocao %}<span style="color:red;">(Promoção)</span>{% endif %}</h2>
-            <p>Tamanho: {{ p.tamanho }} | cor: {{p.cor}}</p>
-            <p>Preço: R$ {{"%.2f"|format(p.preco|float)}}</p>
-            <a href="{{ p.link_wpp }}" target="_blank">Comprar no WhatsApp</a>
+{% extends "base.html" %}
+
+{% block title %}Produtos - {{ categoria }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Categoria: {{ categoria }}</h1>
+    <div class="row">
+        {% for produto in produtos %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                {% if produto.imagem %}
+                <img src="{{ produto.imagem }}" class="card-img-top" alt="{{ produto.nome }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ produto.nome }}</h5>
+                    <p>Cor: {{ produto.cor }}</p>
+                    <p>Tamanho: {{ produto.tamanho }}</p>
+                    <p>Preço: R$ {{ produto.preco }}</p>
+                    {% if produto.promocao %}
+                    <p class="text-success">Promoção: R$ {{ produto.preco_promocional }}</p>
+                    {% endif %}
+                    <a href="{{ produto.link_wpp }}" target="_blank" class="btn btn-primary">Comprar</a>
+                </div>
+            </div>
         </div>
         {% endfor %}
-
     </div>
-    
-</body>
-</html>
+</div>
+{% endblock %}

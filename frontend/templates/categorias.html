@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorias</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
     <h1>Categorias</h1>
-    <div class="cards">
-        {% for cat in categorias %}
-        <div class="card">
-            <a href="{{url_for('categoria', nome=cat)}}">
-                <h2>{{ cat }}</h2>
-            </a>
-        </div>
+    <ul class="list-group">
+        {% for categoria in categorias %}
+            <li class="list-group-item">
+                <a href="{{ url_for('categoria', nome=categoria) }}">{{ categoria }}</a>
+            </li>
         {% endfor %}
-    </div>
-</body>
-</html>
+    </ul>
+</div>
+{% endblock %}

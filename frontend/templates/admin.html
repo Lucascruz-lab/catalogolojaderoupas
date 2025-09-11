@@ -1,50 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
-</head>
-<body>
-    <h1>Painel do Admin</h1>
-    <a href="{{ url_for('logout') }}">Sair</a>
+{% extends "base.html" %}
 
-    <h2>Adicionar Produtos</h2>
-    <form action="{{ url_for('add_produto') }}" method="post">
+{% block title %}Admin{% endblock %}
 
-        Código: <input name="codigo"><br>
+{% block content %}
+<div class="container mt-4">
+    <h1>Admin</h1>
 
-        Nome: <input name="nome"><br>
-
-        Categoria: <input name="categoria"><br>
-
-        Tamanho: <input name="tamanho"><br>
-
-        Cor: <input name="cor"><br>
-
-        <label>Preço Promocional</label>
-        <input type="number" step="0.01" name="preco_promocional"><br>
-
-        Preço: <input name="preco" type="number" step="0.01"><br>
-
-        Promoção: <input name="promocao" type="checkbox"><br>
-
-        Link WhatsApp: <input name="link_wpp"><br>
-        
-        <button type="submit">Adicionar</button>
+    <h2>Adicionar Produto</h2>
+    <form method="post" action="{{ url_for('admin') }}" class="mb-4">
+        <input type="text" name="nome" placeholder="Nome" required>
+        <input type="text" name="categoria" placeholder="Categoria" required>
+        <input type="text" name="cor" placeholder="Cor">
+        <input type="text" name="tamanho" placeholder="Tamanho">
+        <input type="number" step="0.01" name="preco" placeholder="Preço" required>
+        <input type="number" step="0.01" name="preco_promocional" placeholder="Preço Promocional">
+        <input type="text" name="link_wpp" placeholder="Link WhatsApp">
+        <input type="text" name="imagem" placeholder="URL da Imagem">
+        <button type="submit" class="btn btn-success">Adicionar</button>
     </form>
 
-    <h2>Lista de Produtos</h2>
-    <ul>
-        {% for p in produtos %}
-        <li>
-            {{p.nome}} - R$ {{"%.2f"|format(p.preco|float) }}
-            <form action="{{url_for('delete_produto', codigo=p.codigo) }}" method="POST" style="display: inline;">
-                <button type="submit">Excluir</button>
-            </form>
-            <a href="{{ url_for('edit_produto', codigo=p.codigo) }}">Editar</a>
-        </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <h2>Produtos Existentes</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Categoria</th>
+                <th>Preço</th>
+                <th>Promoção</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.codigo }}</td>
+                <td>{{ produto.nome }}</td>
+                <td>{{ produto.categoria }}</td>
+                <td>R$ {{ produto.preco }}</td>
+                <td>{% if produto.promocao %}R$ {{ produto.preco_promocional }}{% endif %}</td>
+                <td>
+                    <a href="{{ url_for('edit_produto', codigo=produto.codigo) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form method="post" action="{{ url_for('delete_produto', codigo=produto.codigo) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

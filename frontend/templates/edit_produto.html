@@ -1,24 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Produtos</title>
-</head>
-<body>
-    <h1>Editar Produtos</h1>
+{% extends "base.html" %}
 
-    <form method="POST">
-        Nome: <input name="nome" value="{{produto.nome}}"><br>
-        Categoria: <input name="categoria" value="{{produto.categoria}}"><br>
-        Tamanho: <input name="tamanho" value="{{produto.tamanho}}"><br>
-        Cor: <input name="cor" value="{{produto.cor}}"><br>
-        Preço: <input name="preco" type="number" step="0.01" value="{{produto.preco}}"><br>
-        Promoção: <input name="promocao" type="checkbox" {% if produto.promocao%}checked{% endif %}><br>
-        Link WhatsApp: <input name="link_wpp" value="{{produto.link_wpp}}"><br>
-        <button type="submit">Salvar</button>
+{% block title %}Editar Produto{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Editar Produto</h1>
+    <form method="post" action="{{ url_for('edit_produto', codigo=produto.codigo) }}">
+        <input type="text" name="nome" value="{{ produto.nome }}" required>
+        <input type="text" name="categoria" value="{{ produto.categoria }}" required>
+        <input type="text" name="cor" value="{{ produto.cor }}">
+        <input type="text" name="tamanho" value="{{ produto.tamanho }}">
+        <input type="number" step="0.01" name="preco" value="{{ produto.preco }}" required>
+        <input type="number" step="0.01" name="preco_promocional" value="{{ produto.preco_promocional }}">
+        <input type="text" name="link_wpp" value="{{ produto.link_wpp }}">
+        <input type="text" name="imagem" value="{{ produto.imagem }}">
+        <button type="submit" class="btn btn-primary">Salvar</button>
     </form>
-
-    <a href="{{ url_for('admin') }}">Voltar</a>
-</body>
-</html>
+</div>
+{% endblock %}
