@@ -4,28 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Catálogo de Produtos</h1>
+<body class="bg-light">
 
-    <h2>Categorias</h2>
-    <ul>
-        {% for cat in categorias %}
-        <li><a href="#{{ cat }}">{{ cat }}</a></li>
-        {% endfor %}
-    </ul>
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Catálogo de Produtos</h1>
 
-    {% for p in produtos if p.categoria == cat %}
-        <h2 id="{{ cat }}">{{ cat }}</h2>
-        <ul>
-            {% for p in produtos if p.categoria == cat %}
-                <li>
-                    <b>{{p.nome}}</b> - {{p.cor}} - {{p.tamanho}} <br>
-                    R$ {{"%.2f"|format(p.preco|float)}}
-                    {% if p.promocao %}<span style="color:red;">(Promoção!)</span>{% endif %} <br>
-                    <a href="{{ p.link_wpp }}" target="_blank">Comprar no WhatsApp</a>
-        {% endfor %}        </li>
+        <!-- Navegação de Categorias -->
+        <h2>Categorias</h2>
+        <ul class="nav nav-pills justify-content-center mb-4">
+            {% for cat in categorias %}
+            <li class="nav-item">
+                <a class="nav-link" href="#{{ cat }}">{{ cat }}</a>
+            </li>
+            {% endfor %}
         </ul>
-    {% endfor %}    
+
+        <!-- Produtos por categoria -->
+    {% for cat in categorias %}
+        <h2 id="{{ cat }}" class="mt-4">{{ cat }}</h2>
+        <div class="row">
+            {% for p in produtos if p.categoria == cat %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    {% if p.imagem %}
+                        <img src="{{ p.imagem }}" class="card-img-top" alt="Imagem de {{ p.nome }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ p.nome }}</h5>
+
+                        <p class="card-text">
+                            Cor: {{ p.cor }} <br>
+                            Tamanho: {{ p.tamanho }} <br>
+
+                            {% if p.promocao and p.preco_promocional %}
+                                <span class="text-muted text-decoration-line-through">
+                                    R$ {{ "%.2f"|format(p.preco|float) }}
+                                </span>
+                                <br>
+                                <span class="fw-bold text-danger fs-5">
+                                    R$ {{ "%.2f"|format(p.preco_promocional|float) }}
+                                </span>
+                                <span class="badge bg-danger ms-2">Promoção</span>
+                            {% else %}
+                                <b>R$ {{ "%.2f"|format(p.preco|float) }}</b>
+                            {% endif %}
+                        </p>
+                        <a href="{{ p.link_wpp }}" target="_blank" class="btn btn-success w-100">Comprar no WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+        
+    </div>
+
+     
 </body>
 </html>

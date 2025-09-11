@@ -52,6 +52,18 @@ def admin():
     produtos = ler_produtos()
     return render_template("admin.html", produtos=produtos)
 
+    novo_produto = {
+        "nome": nome,
+        "categoria": categoria,
+        "cor": cor,
+        "tamanho": tamanho,
+        "preco": preco,
+        "preco_promocional": preco_promocional if preco_promocional else None,
+        "promocao": bool(preco_promocional),
+        "link_wpp": link_wpp,
+        "imagem": imagem,
+    }
+
 @app.route("/admin/add", methods=["POST"])
 def add_produto():
     if not session.get("admin"):
