@@ -5,7 +5,7 @@ from datetime import timedelta
 import os
 import json
 
-app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
+app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "segredo123"
 
 SENHA_ADMIN_HASH = "scrypt:32768:8:1$2NVeOlJni1Hxqwc8$feec27c33ce81a165d276ce54944ba673dc4ac5856a7f7a30a69933e613b3df68cbaac53df7112e000eeab530ed8511576fb34067876204ed897f8138a8b3fff"
