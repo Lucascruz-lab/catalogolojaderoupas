@@ -1,54 +1,87 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
 
 {% block title %}Admin{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Admin</h1>
+    <h1 class="mb-4">⚙️ Painel do Admin</h1>
 
-    <h2>Adicionar Produto</h2>
-    <form method="post" action="{{ url_for('admin') }}" class="mb-4">
-        <input type="text" name="nome" placeholder="Nome" required>
-        <input type="text" name="categoria" placeholder="Categoria" required>
-        <input type="text" name="cor" placeholder="Cor">
-        <input type="text" name="tamanho" placeholder="Tamanho">
-        <input type="number" step="0.01" name="preco" placeholder="Preço" required>
-        <input type="number" step="0.01" name="preco_promocional" placeholder="Preço Promocional">
-        <input type="text" name="link_wpp" placeholder="Link WhatsApp">
-        <input type="text" name="imagem" placeholder="URL da Imagem">
-        <button type="submit" class="btn btn-success">Adicionar</button>
-    </form>
+    <!-- Formulário de adicionar produto -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Adicionar Produto</h5>
+            <form action="{{ url_for('add_produto') }}" method="post" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nome</label>
+                        <input type="text" name="nome" class="form-control" required>
+                    </div>
 
-    <h2>Produtos Existentes</h2>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Preço</th>
-                <th>Promoção</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for produto in produtos %}
-            <tr>
-                <td>{{ produto.codigo }}</td>
-                <td>{{ produto.nome }}</td>
-                <td>{{ produto.categoria }}</td>
-                <td>R$ {{ produto.preco }}</td>
-                <td>{% if produto.promocao %}R$ {{ produto.preco_promocional }}{% endif %}</td>
-                <td>
+                    <div class="col-md-6">
+                        <label class="form-label">Categoria</label>
+                        <input type="text" name="categoria" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Tamanho</label>
+                        <input type="text" name="tamanho" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Cor</label>
+                        <input type="text" name="cor" class="form-control">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Preço</label>
+                        <input type="number" name="preco" step="0.01" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Preço Promocional</label>
+                        <input type="number" name="preco_promocional" step="0.01" class="form-control">
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="form-label">WhatsApp (link)</label>
+                        <input type="text" name="link_wpp" class="form-control">
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label">Imagem do Produto</label>
+                        <input type="file" name="imagem" class="form-control" accept="image/*">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3">Adicionar Produto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lista de produtos -->
+    <h2 class="mb-3">📦 Produtos Cadastrados</h2>
+    <div class="row">
+        {% for produto in produtos %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 shadow-sm">
+                {% if produto.imagem %}
+                <img src="{{ produto.imagem }}" class="card-img-top" alt="{{ produto.nome }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ produto.nome }}</h5>
+                    <p>Categoria: {{ produto.categoria }}</p>
+                    <p>Preço: R$ {{ produto.preco }}</p>
+                    {% if produto.preco_promocional %}
+                    <p class="text-success">Promoção: R$ {{ produto.preco_promocional }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer d-flex justify-content-between">
                     <a href="{{ url_for('edit_produto', codigo=produto.codigo) }}" class="btn btn-warning btn-sm">Editar</a>
-                    <form method="post" action="{{ url_for('delete_produto', codigo=produto.codigo) }}" style="display:inline;">
-                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    <a href="{{ url_for('delete_produto', codigo=produto.codigo) }}" class="btn btn-danger btn-sm">Excluir</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

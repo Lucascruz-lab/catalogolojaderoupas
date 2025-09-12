@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+from werkzeug.utils import secure_filename
+import os
 import json
 
 app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
@@ -14,7 +16,7 @@ def salvar_produtos(produtos):
     with open(ARQUIVO_JSON, "w", encoding="utf-8") as f:
         json.dump(produtos, f, indent=4, ensure_ascii=False) 
 
-def criar_produto(form_data):
+def criar_produto(form_data, arquivo=None):
     produtos = ler_produtos()
 
     # Gera código único
@@ -23,6 +25,8 @@ def criar_produto(form_data):
 
     preco = float(form_data.get("preco") or 0)
     preco_promocional = float(form_data.get("preco_promocional") or 0)
+
+    caminho_imagem = salvar_arquivo(arquivo) if arquivo else None
 
     novo_produto = {
         "codigo": novo_codigo,
@@ -34,12 +38,25 @@ def criar_produto(form_data):
         "preco_promocional": preco_promocional if preco_promocional > 0 else None,
         "promocao": preco_promocional > 0,
         "link_wpp": form_data.get("link_wpp"),
-        "imagem": form_data.get("imagem")
+        "imagem": caminho_imagem
     }
 
     produtos.append(novo_produto)
     salvar_produtos(produtos)
     return novo_produto
+
+UPLOAD_FOLDER = "frontend/static/uploads"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+def salvar_arquivo(arquivo):
+    if arquivo and arquivo.filename != "":
+        nome_arquivo = secure_filename(arquivo.filename)
+        caminho = os.path.join(UPLOAD_FOLDER, nome_arquivo)
+        arquivo.save(caminho)
+        return f"uploads/{nome_arquivo}"  # caminho relativo para templates
+    return None
 
 # ______________ROTAS______________________
 @app.route("/")
@@ -90,7 +107,8 @@ def add_produto():
     if not session.get("admin"):
         return redirect(url_for("login"))
     
-    criar_produto(request.form)
+    arquivo = request.files.get("imagem")
+    criar_produto(request.form, arquivo)
     return redirect(url_for("admin"))
     
 @app.route("/admin/delete/<codigo>", methods=["POST"])
@@ -126,13 +144,15 @@ def edit_produto(codigo):
 
         produto["preco"] = float(request.form.get("preco"))
 
-        produto["preco_promocional"] = float(request.form.get("preco_promocional") or 0)
+        produto["preco_promocional"] = float(request.form.get("preco_promocional") or 0) if request.form.get("preco_promocional") else None
 
         produto["promocao"] = produto["preco_promocional"] > 0
 
         produto["link_wpp"] = request.form.get("link_wpp")
 
-        produto["imagem"] = request.form.get("imagem")
+        arquivo = request.files.get("imagem")
+        if arquivo and arquivo.filename != "":
+            produto["imagem"] = salvar_arquivo(arquivo)
 
         salvar_produtos(produtos)
         return redirect(url_for("admin"))

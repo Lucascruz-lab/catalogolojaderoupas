@@ -1,28 +1,43 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
 
 {% block title %}Catálogo{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Catálogo</h1>
-    <div class="row">
+    <h1 class="mb-4">Catálogo</h1>
+
+    <!-- Grid responsivo -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         {% for produto in produtos %}
-        <div class="col-md-4 mb-3">
-            <div class="card">
+        <div class="col">
+            <div class="card h-100 shadow-sm">
                 {% if produto.imagem %}
-                <img src="{{ produto.imagem }}" class="card-img-top" alt="{{ produto.nome }}">
+                <img src="{{ produto.imagem }}" class="card-img-top img-fluid" alt="{{ produto.nome }}"
+                     style="height: 200px; object-fit: cover;">
                 {% endif %}
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ produto.nome }}</h5>
-                    <p>Categoria: {{ produto.categoria }}</p>
-                    <p>Cor: {{ produto.cor }}</p>
-                    <p>Tamanho: {{ produto.tamanho }}</p>
-                    <p>Preço: R$ {{ produto.preco }}</p>
-                    {% if produto.promocao %}
-                    <p class="text-success">Promoção: R$ {{ produto.preco_promocional }}</p>
-                    {% endif %}
-                    <a href="{{ produto.link_wpp }}" target="_blank" class="btn btn-primary">Comprar</a>
+                    <p class="mb-1"><strong>Categoria:</strong> {{ produto.categoria }}</p>
+                    {% if produto.cor %}<p class="mb-1"><strong>Cor:</strong> {{ produto.cor }}</p>{% endif %}
+                    {% if produto.tamanho %}<p class="mb-1"><strong>Tamanho:</strong> {{ produto.tamanho }}</p>{% endif %}
+
+                    <p class="mb-2">
+                        {% if produto.promocao %}
+                            <span class="text-muted text-decoration-line-through">R$ {{ '%.2f'|format(produto.preco) }}</span>
+                            <span class="ms-2 fw-bold text-danger">R$ {{ '%.2f'|format(produto.preco_promocional) }}</span>
+                        {% else %}
+                            <span class="fw-bold">R$ {{ '%.2f'|format(produto.preco) }}</span>
+                        {% endif %}
+                    </p>
+
+                    <div class="mt-auto">
+                        <a href="{{ produto.link_wpp }}" target="_blank" class="btn btn-primary w-100">
+                            💬 Comprar
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted small">
+                    Código: {{ produto.codigo }}
                 </div>
             </div>
         </div>
