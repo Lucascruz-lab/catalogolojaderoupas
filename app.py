@@ -12,7 +12,7 @@ SENHA_ADMIN_HASH = "scrypt:32768:8:1$2NVeOlJni1Hxqwc8$feec27c33ce81a165d276ce549
 
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-ARQUIVO_JSON = "backend/produtos.json"
+ARQUIVO_JSON = "data/produtos.json"
 
 def ler_produtos():
     with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
@@ -51,7 +51,7 @@ def criar_produto(form_data, arquivo=None):
     salvar_produtos(produtos)
     return novo_produto
 
-UPLOAD_FOLDER = "frontend/static/uploads"
+UPLOAD_FOLDER = "static/uploads"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
