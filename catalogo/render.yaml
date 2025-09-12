@@ -7,4 +7,6 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: PORT
-        value: 10000   # Render vai sobrescrever automaticamente
+        value: 10000  # Render sobrescreve automaticamente
+      - key: FLASK_ENV
+        value: production
