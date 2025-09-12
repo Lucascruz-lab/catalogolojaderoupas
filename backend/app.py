@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash
+from datetime import timedelta
 import os
 import json
 
 app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
 app.secret_key = "segredo123"
+
+SENHA_ADMIN_HASH = "scrypt:32768:8:1$2NVeOlJni1Hxqwc8$feec27c33ce81a165d276ce54944ba673dc4ac5856a7f7a30a69933e613b3df68cbaac53df7112e000eeab530ed8511576fb34067876204ed897f8138a8b3fff"
+
+app.permanent_session_lifetime = timedelta(minutes=30)
 
 ARQUIVO_JSON = "backend/produtos.json"
 
@@ -77,8 +83,16 @@ def login():
         usuario = request.form["usuario"]
         senha = request.form["senha"]
 
-        if usuario == "admin" and senha == "123":
+        if "tentativas" not in session:
+            session["tentativas"] = 0
+        session["tentativas"] += 1
+        if session["tentativas"] > 15:
+            return render_template("login.html", erro="Muitas tentativas. Tente novamente mais tarde.")        
+
+        if usuario == "admin" and check_password_hash(SENHA_ADMIN_HASH, senha):
             session["admin"] = True
+            session["tentativas"] = 0
+            session.permanent = True
             return redirect(url_for("admin"))
         else:
             return render_template("login.html", erro="Usuario ou senha incorretos")

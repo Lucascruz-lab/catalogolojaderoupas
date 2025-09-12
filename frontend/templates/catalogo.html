@@ -23,10 +23,10 @@
 
                     <p class="mb-2">
                         {% if produto.promocao %}
-                            <span class="text-muted text-decoration-line-through">R$ {{ '%.2f'|format(produto.preco) }}</span>
-                            <span class="ms-2 fw-bold text-danger">R$ {{ '%.2f'|format(produto.preco_promocional) }}</span>
+                            <span class="text-muted text-decoration-line-through">R$ {{ '%.2f'|format(produto.preco|float) }}</span>
+                            <span class="ms-2 fw-bold text-danger">R$ {{ '%.2f'|format(produto.preco_promocional|float) }}</span>
                         {% else %}
-                            <span class="fw-bold">R$ {{ '%.2f'|format(produto.preco) }}</span>
+                            <span class="fw-bold">R$ {{ '%.2f'|format(produto.preco|float) }}</span>
                         {% endif %}
                     </p>
 
