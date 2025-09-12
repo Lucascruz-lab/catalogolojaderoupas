@@ -12,7 +12,7 @@ SENHA_ADMIN_HASH = "scrypt:32768:8:1$2NVeOlJni1Hxqwc8$feec27c33ce81a165d276ce549
 
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-ARQUIVO_JSON = "data/produtos.json"
+ARQUIVO_JSON = os.path.join(os.path.dirmane(__file__)),"catalogo/produtos.json"
 
 def ler_produtos():
     with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
@@ -51,7 +51,7 @@ def criar_produto(form_data, arquivo=None):
     salvar_produtos(produtos)
     return novo_produto
 
-UPLOAD_FOLDER = "static/uploads"
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__)),"static/uploads"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -69,7 +69,7 @@ def salvar_arquivo(arquivo):
 def home():
     produtos = ler_produtos()
     categorias = list(set([p["categoria"] for p in produtos]))
-    return render_template("teste.html", categorias=categorias)
+    return render_template("categorias.html", categorias=categorias)
 
 @app.route("/categoria/<nome>")
 def categoria(nome):
