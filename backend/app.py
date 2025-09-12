@@ -90,7 +90,7 @@ def login():
         if "tentativas" not in session:
             session["tentativas"] = 0
         session["tentativas"] += 1
-        if session["tentativas"] > 15:
+        if session["tentativas"] > 5:
             return render_template("login.html", erro="Muitas tentativas. Tente novamente mais tarde.")        
 
         if usuario == "admin" and check_password_hash(SENHA_ADMIN_HASH, senha):
