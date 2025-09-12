@@ -69,7 +69,7 @@ def salvar_arquivo(arquivo):
 def home():
     produtos = ler_produtos()
     categorias = list(set([p["categoria"] for p in produtos]))
-    return render_template("categorias.html", categorias=categorias)
+    return render_template("teste.html", categorias=categorias)
 
 @app.route("/categoria/<nome>")
 def categoria(nome):
