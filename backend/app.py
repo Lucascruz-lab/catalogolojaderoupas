@@ -79,6 +79,10 @@ def categoria(nome):
 # _________ LOGIN ADMIN _______________
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
+    if session.get("admin"):
+        return redirect(url_for("admin"))
+
     if request.method == "POST":
         usuario = request.form["usuario"]
         senha = request.form["senha"]
