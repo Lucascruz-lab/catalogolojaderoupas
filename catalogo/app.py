@@ -12,7 +12,7 @@ SENHA_ADMIN_HASH = "scrypt:32768:8:1$2NVeOlJni1Hxqwc8$feec27c33ce81a165d276ce549
 
 app.permanent_session_lifetime = timedelta(minutes=30)
 
-ARQUIVO_JSON = os.path.join(os.path.dirmane(__file__)),"catalogo/produtos.json"
+ARQUIVO_JSON = os.path.join(os.path.dirname(__file__),"catalogo","produtos.json")
 
 def ler_produtos():
     with open(ARQUIVO_JSON, "r", encoding="utf-8") as f:
