@@ -51,10 +51,11 @@ def criar_produto(form_data, arquivo=None):
     salvar_produtos(produtos)
     return novo_produto
 
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__)),"static/uploads"
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__),"static/uploads")
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 def salvar_arquivo(arquivo):
     if arquivo and arquivo.filename != "":
