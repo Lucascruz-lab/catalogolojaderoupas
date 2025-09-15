@@ -62,7 +62,7 @@ def salvar_arquivo(arquivo):
         nome_arquivo = secure_filename(arquivo.filename)
         caminho = os.path.join(UPLOAD_FOLDER, nome_arquivo)
         arquivo.save(caminho)
-        return f"uploads/{nome_arquivo}"  # caminho relativo para templates
+        return f"/static/uploads/{nome_arquivo}"  # caminho relativo para templates
     return None
 
 # ______________ROTAS______________________
