@@ -72,7 +72,7 @@ def salvar_arquivo(arquivo):
 
 
         arquivo.save(caminho)
-        return f"static/uploads/{nome_arquivo}"  # caminho relativo para templates
+        return f"/static/uploads/{nome_arquivo}"  # caminho relativo para templates
     return None
 
 # ______________ROTAS______________________
