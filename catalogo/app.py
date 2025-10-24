@@ -60,7 +60,17 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 def salvar_arquivo(arquivo):
     if arquivo and arquivo.filename != "":
         nome_arquivo = secure_filename(arquivo.filename)
-        caminho = os.path.join(UPLOAD_FOLDER, nome_arquivo)
+        pasta_upload = app.config["UPLOAD_FOLDER"]
+
+        caminho = os.path.join(pasta_upload, nome_arquivo)
+        contador = 1
+        nome, ext = os.path.splitext(nome_arquivo)
+        while os.path.exists(caminho):
+            nome_arquivo = f"{nome}_{contador}{ext}"
+            caminho = os.path.join(pasta_upload, nome_arquivo)
+            contador += 1 
+
+
         arquivo.save(caminho)
         return f"static/uploads/{nome_arquivo}"  # caminho relativo para templates
     return None
