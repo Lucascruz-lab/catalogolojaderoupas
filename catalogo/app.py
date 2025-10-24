@@ -194,6 +194,12 @@ def catalogo():
     categorias = sorted(set([p["categoria"] for p in produtos]))
     return render_template("catalogo.html", produtos=produtos, categorias=categorias)
 
+@app.errorhandler(Exception)
+def handle_exception(e):
+    import traceback
+    return f"<pre>{traceback.format_exc()}</pre>", 500
+
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
