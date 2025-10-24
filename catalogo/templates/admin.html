@@ -65,7 +65,7 @@
         <div class="col-md-4 mb-3">
             <div class="card h-100 shadow-sm">
                 {% if produto.imagem %}
-                <img src="{{ produto.imagem }}" class="card-img-top" alt="{{ produto.nome }}">
+                <img src="{{ url_for('static', filename=produto.imagem.split('static/')[-1]) }}" class="card-img-top" alt="{{ produto.nome }}">
                 {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ produto.nome }}</h5>
@@ -77,7 +77,9 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between">
                     <a href="{{ url_for('edit_produto', codigo=produto.codigo) }}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="{{ url_for('delete_produto', codigo=produto.codigo) }}" class="btn btn-danger btn-sm">Excluir</a>
+                    <form action="{{ url_for('delete_produto', codigo=produto.codigo) }}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                    </form>
                 </div>
             </div>
         </div>
