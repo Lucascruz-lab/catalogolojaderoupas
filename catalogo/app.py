@@ -175,7 +175,7 @@ def edit_produto(codigo):
 
         produto["preco_promocional"] = float(request.form.get("preco_promocional") or 0) if request.form.get("preco_promocional") else None
 
-        produto["promocao"] = produto["preco_promocional"] > 0
+        produto["promocao"] = (produto["preco_promocional"] or 0) > 0
 
         produto["link_wpp"] = request.form.get("link_wpp")
 
